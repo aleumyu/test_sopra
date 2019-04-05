@@ -21,7 +21,7 @@ router.get('/api/v1/users', function(req, res, next) {
     })
 })
 
-router.get('/api/v1/users/:id', function(req, res, next) {
+router.get('/api/v1/users/id/:id', function(req, res, next) {
   axios.get(clientsData)
     .then(results => {
       if (results.error) {
@@ -31,15 +31,32 @@ router.get('/api/v1/users/:id', function(req, res, next) {
           if (results.data.clients[i].id === req.params.id) {
             console.log('hi');
             return res.send(results.data.clients[i]);
-          } else {
-            console.log('bye');
-            res.status(404).send('not found');
-          }
-
+          } 
         }
+        console.log('bye');
+        res.status(404).send('not found');
       }
     })   
 })
 
+router.get('/api/v1/users/name/:name', function(req, res, next) {
+  axios.get(clientsData)
+    .then(results => {
+      if (results.error) {
+        res.status(500).send(results.error);
+      } else {
+        console.log(req.params.name);
+        console.log(results.data.clients[0].name);
+        for ( let i = 0; i < results.data.clients.length; i++) {
+          if (results.data.clients[i].name === req.params.name) {
+            console.log('hi');
+            return res.send(results.data.clients[i]);
+          } 
+        }
+        console.log('bye');
+        res.status(404).send('not found');
+      }
+    })   
+})
 
 module.exports = router;
