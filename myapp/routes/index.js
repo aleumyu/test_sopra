@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const axios = require("axios");
+const axios = require('axios');
 const clientsData = 'http://www.mocky.io/v2/5808862710000087232b75ac';
-const policiesData = 'http://www.mocky.io/v2/580891a4100000e8242b75c5'
+const policiesData = 'http://www.mocky.io/v2/580891a4100000e8242b75c5';
 
 
 /* GET home page. */
