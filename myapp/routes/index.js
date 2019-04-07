@@ -5,28 +5,8 @@ const clientsData = 'http://www.mocky.io/v2/5808862710000087232b75ac';
 const policiesData = 'http://www.mocky.io/v2/580891a4100000e8242b75c5';
 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
-/*
-// Test axios
-router.get('/api/v1/users', function(req, res, next) {
-  console.log("test call");
-  axios.get(clientsData)
-    .then((results) => {
-      if (results.error) {
-        console.log("hi");
-        res.status(500).send(results.error);
-      }
-      console.log("hello");
-      res.send(results.data);
-    })
-})
-*/
-
-// Get user data filtered by user id OK
+// Get user data filtered by user id or user name OK
 router.get('/api/v1/users/', function(req, res, next) {
   let idParam = req.query.userid;
   let nameParam = req.query.username;
@@ -37,41 +17,21 @@ router.get('/api/v1/users/', function(req, res, next) {
       } else if (idParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].id === idParam) {
-            console.log('hi');
             return res.send(results.data.clients[i]);
           } 
         }
-        console.log('bye');
-        res.status(404).send('client not found');
+        res.status(404).send('client with the id not found');
       } else if (nameParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].name.toLowerCase() === nameParam.toLowerCase()) {
             return res.send(results.data.clients[i]);
           } 
         }
-        res.status(404).send('client not found');
-      }
-      
+        res.status(404).send('client with the name not found');
+      }    
     })   
 })
-/*
-// Get user data filtered by user name OK
-router.get('/api/v1/users/name/:name', function(req, res, next) {
-  axios.get(clientsData)
-    .then(results => {
-      if (results.error) {
-        res.status(500).send(results.error);
-      } else {
-        for ( let i = 0; i < results.data.clients.length; i++) {
-          if (results.data.clients[i].name.toLowerCase() === req.params.name.toLowerCase()) {
-            return res.send(results.data.clients[i]);
-          } 
-        }
-        res.status(404).send('client not found');
-      }
-    })   
-}) 
-*/
+
 
 // Get the list of policies linked to a user name OK
 router.get('/api/v1/policies', function(req, res, next) {
