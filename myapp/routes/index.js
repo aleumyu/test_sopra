@@ -61,17 +61,19 @@ router.get('/api/v1/users/name/:name', function(req, res, next) {
 }) 
 
 // Get the list of policies linked to a user name OK
-router.get('/api/v1/policies/:name', function(req, res, next) {
+router.get('/api/v1/policies', function(req, res, next) {
+  let userName = req.query.username;
   let userId = '';
+  let policies = [];
   axios.get(clientsData)
     .then(results1 => {
       if (results1.error) {
         res.status(500).send(results1.error);
       } else {
         for ( let i = 0; i < results1.data.clients.length; i++) {
-          if (results1.data.clients[i].name.toLowerCase() === req.params.name.toLowerCase()) {
+          if (results1.data.clients[i].name.toLowerCase() === userName.toLowerCase()) {
             userId = results1.data.clients[i].id; 
-            return axios.get(policiesData)
+            return axios.get(policiesData);
           } 
         }
         res.status(404).send('client not found');
@@ -83,13 +85,22 @@ router.get('/api/v1/policies/:name', function(req, res, next) {
       } else {
         for ( let i = 0; i < results2.data.policies.length; i++) {
           if (userId === results2.data.policies[i].clientId) {
-            return res.send(results2.data.policies[i]);
+            policies.push(results2.data.policies[i]);           
           }
         }
-        res.status(404).send('policy not found');
+        return policies;
       }
     })
-}) // to be included: toLowerCase
+    .then(results3 => {
+      if (results3.error) {
+        res.status(500).send(results3.error);
+      } else if (results3[0]) {
+        res.send(results3);
+      } else {
+        res.status(404).send('policy not found');
+      } 
+    })
+}) 
 
 
 // Get the user linked to a policy number OK
