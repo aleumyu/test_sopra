@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/*
 // Test axios
 router.get('/api/v1/users', function(req, res, next) {
   console.log("test call");
@@ -23,26 +24,37 @@ router.get('/api/v1/users', function(req, res, next) {
       res.send(results.data);
     })
 })
+*/
 
 // Get user data filtered by user id OK
-router.get('/api/v1/users/id/:id', function(req, res, next) {
+router.get('/api/v1/users/', function(req, res, next) {
+  let idParam = req.query.userid;
+  let nameParam = req.query.username;
   axios.get(clientsData)
     .then(results => {
       if (results.error) {
         res.status(500).send(results.error);
-      } else {
+      } else if (idParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
-          if (results.data.clients[i].id === req.params.id) {
+          if (results.data.clients[i].id === idParam) {
             console.log('hi');
             return res.send(results.data.clients[i]);
           } 
         }
         console.log('bye');
         res.status(404).send('client not found');
+      } else if (nameParam) {
+        for ( let i = 0; i < results.data.clients.length; i++) {
+          if (results.data.clients[i].name.toLowerCase() === nameParam.toLowerCase()) {
+            return res.send(results.data.clients[i]);
+          } 
+        }
+        res.status(404).send('client not found');
       }
+      
     })   
 })
-
+/*
 // Get user data filtered by user name OK
 router.get('/api/v1/users/name/:name', function(req, res, next) {
   axios.get(clientsData)
@@ -59,6 +71,7 @@ router.get('/api/v1/users/name/:name', function(req, res, next) {
       }
     })   
 }) 
+*/
 
 // Get the list of policies linked to a user name OK
 router.get('/api/v1/policies', function(req, res, next) {
