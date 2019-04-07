@@ -18,13 +18,13 @@ for an application that manages information about our insurance policies and com
 
 ## API ROUTES PLAN
   
-   ![Routes](routes.png)
+   ![Routes](routes1.png)
    
 
 ## SETUP
 
 ### Dependencies
-Run `npm` to install dependencies.
+Run `npm install` to install dependencies.
 
 
 ### Run Your Start
