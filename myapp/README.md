@@ -18,7 +18,7 @@ for an application that manages information about our insurance policies and com
 
 ## API ROUTES PLAN
   
-   ![Routes](./readme/routes)
+   ![](/readme/routes.png)
    
 
 ## SETUP
