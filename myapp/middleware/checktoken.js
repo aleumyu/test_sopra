@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
                 
 
                 try {
-                    const user = jwt.verify(token, 'secretKey'); 
+                    const user = jwt.verify(token, process.env.secretKey); 
                     let found = false;
                     requiredRoles.split(',').map(e => {
                         if (user.role === e ) {

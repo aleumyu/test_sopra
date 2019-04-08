@@ -1,3 +1,4 @@
+require("dotenv").config();
 var express = require('express');
 var router = express.Router();
 const axios = require('axios');
@@ -18,7 +19,7 @@ router.get('/api/v1/users/token/:userid', function(req, res, next) {
       } else {
         for ( let i = 0; i < results.data.clients.length; i++ ) {
           if (results.data.clients[i].id === req.params.userid) {
-            res.send(jwt.sign(results.data.clients[i], 'secretKey', { expiresIn: '1h' }));
+            res.send(jwt.sign(results.data.clients[i], process.env.secretKey, { expiresIn: '1h' }));
           }
         }
         console.log('ERROR: cannot login');
@@ -126,7 +127,7 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
             return res.send(results2.data.clients[i]);
           }
         }
-        res.status(404).send('client not found');
+        return res.status(404).send('client not found');
       }
     });
 });
