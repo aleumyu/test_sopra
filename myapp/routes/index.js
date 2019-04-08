@@ -19,7 +19,7 @@ router.get('/api/v1/users/token/:userid', function(req, res, next) {
       } else {
         for ( let i = 0; i < results.data.clients.length; i++ ) {
           if (results.data.clients[i].id === req.params.userid) {
-            res.send(jwt.sign(results.data.clients[i], process.env.secretKey, { expiresIn: '1h' }));
+            return res.send(jwt.sign(results.data.clients[i], process.env.secretKey, { expiresIn: '1h' }));
           }
         }
         console.log('ERROR: cannot login');
