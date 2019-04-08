@@ -19,11 +19,11 @@ router.get('/api/v1/users/token/:userid', function(req, res, next) {
       } else {
         for ( let i = 0; i < results.data.clients.length; i++ ) {
           if (results.data.clients[i].id === req.params.userid) {
-            res.send(jwt.sign(results.data.clients[i], process.env.secretKey, { expiresIn: '1h' }));
+            return res.send(jwt.sign(results.data.clients[i], process.env.secretKey, { expiresIn: '1h' }));
           }
         }
         console.log('ERROR: cannot login');
-        res.status(404).send('404 Error: No user found for that id');
+        return res.status(404).send('404 Error: No user found for that id');
         
       }
     });
@@ -41,17 +41,17 @@ router.get('/api/v1/users/', checkTokenForRoles('user,admin'), function(req, res
       } else if (idParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].id === idParam) {
-            res.send(results.data.clients[i]); 
+            return res.send(results.data.clients[i]); 
           } 
         }
-        res.status(404).send('client with the id not found');
+        return res.status(404).send('client with the id not found');
       } else if (nameParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].name.toLowerCase() === nameParam.toLowerCase()) {
-            res.send(results.data.clients[i]);
+            return res.send(results.data.clients[i]);
           } 
         }
-        res.status(404).send('client with the name not found');
+        return res.status(404).send('client with the name not found');
       }    
     });   
 });
