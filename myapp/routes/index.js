@@ -6,7 +6,7 @@ const policiesData = 'http://www.mocky.io/v2/580891a4100000e8242b75c5';
 
 
 
-// Get user data filtered by user id or user name OK
+// Get user data filtered by userid or username OK
 router.get('/api/v1/users/', function(req, res, next) {
   let idParam = req.query.userid;
   let nameParam = req.query.username;
@@ -17,23 +17,23 @@ router.get('/api/v1/users/', function(req, res, next) {
       } else if (idParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].id === idParam) {
-            return res.send(results.data.clients[i]);
+            res.send(results.data.clients[i]); 
           } 
         }
         res.status(404).send('client with the id not found');
       } else if (nameParam) {
         for ( let i = 0; i < results.data.clients.length; i++) {
           if (results.data.clients[i].name.toLowerCase() === nameParam.toLowerCase()) {
-            return res.send(results.data.clients[i]);
+            res.send(results.data.clients[i]);
           } 
         }
         res.status(404).send('client with the name not found');
       }    
-    })   
-})
+    });   
+});
 
 
-// Get the list of policies linked to a user name OK
+// Get the list of policies linked to a username OK
 router.get('/api/v1/policies', function(req, res, next) {
   let userName = req.query.username;
   let userId = '';
@@ -72,8 +72,8 @@ router.get('/api/v1/policies', function(req, res, next) {
       } else {
         res.status(404).send('policy not found');
       } 
-    })
-}) 
+    });
+}); 
 
 
 // Get the user linked to a policy number OK
@@ -104,7 +104,7 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
         }
         res.status(404).send('client not found');
       }
-    })
-})
+    });
+});
 
 module.exports = router;
