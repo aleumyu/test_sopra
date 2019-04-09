@@ -31,7 +31,6 @@ router.get('/api/v1/users/token/:userid', function(req, res, next) {
 // Get user data filtered by userid or username -> Can be accessed by users with role "users" and "admin"
 
 router.get('/api/v1/users/', checkTokenForRoles('user,admin'), function(req, res, next) {
-  console.log('test')
   let idParam = req.query.userid;
   let nameParam = req.query.username;
   axios.get(clientsData)
@@ -71,7 +70,6 @@ router.get('/api/v1/policies', checkTokenForRoles('admin'), function(req, res, n
         for ( let i = 0; i < results1.data.clients.length; i++) {
           if (results1.data.clients[i].name.toLowerCase() === userName.toLowerCase()) {
             userId = results1.data.clients[i].id; 
-            console.log('userId is ' + userId);
             return getPoliciesDataByUserId(policiesData, res, userId);
           } 
         }
@@ -142,7 +140,6 @@ function getClientsData(x, res, userId) {
       }
     })
     .catch (() => res.status(404).send('client not found'));
-
 }
 
 module.exports = router;
