@@ -22,7 +22,7 @@ for an application that manages information about insurance policies and company
   - Assumption: every user is aware of their own id (in frontend)
 
   - With this userid, user can access to the endpoint as get(/api/vi/users/token/:userid)
-    - In the response of this endpoint JWT will be generated, which will be the encoded user for the userid params
+    - In the response of this endpoint jwt will be generated, which will be the encoded user for the userid params
     - Any future request to the protected enpoint must have jwt within the authorization header
 
   - Middleware(checktoken) protects the each methods and endpoints according to the role
