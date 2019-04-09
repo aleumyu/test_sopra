@@ -60,7 +60,7 @@ router.get('/api/v1/users/', checkTokenForRoles('user,admin'), function(req, res
 router.get('/api/v1/policies', function(req, res, next) {
   let userName = req.query.username;
   let userId = '';
-  let policies = [];
+  
   axios.get(clientsData)
     .then(results1 => {
       if (results1.error) {
@@ -69,40 +69,46 @@ router.get('/api/v1/policies', function(req, res, next) {
         for ( let i = 0; i < results1.data.clients.length; i++) {
           if (results1.data.clients[i].name.toLowerCase() === userName.toLowerCase()) {
             userId = results1.data.clients[i].id; 
-            return axios.get(policiesData);
+            console.log('userId is ' + userId);
+            return getPoliciesDataByUserId(policiesData, res, userId);
           } 
         }
-        res.status(404).send('client not found');
+        throw new Error();
       }
     })
-    .then(results2 => {
-      if (results2.error) {
-        res.status(500).send(results2.error);
-      } else {
-        for ( let i = 0; i < results2.data.policies.length; i++) {
-          if (userId === results2.data.policies[i].clientId) {
-            policies.push(results2.data.policies[i]);           
-          }
-        }
-        return policies;
-      }
-    })
-    .then(results3 => {
-      if (results3.error) {
-        res.status(500).send(results3.error);
-      } else if (results3[0]) {
-        res.send(results3);
-      } else {
-        res.status(404).send('policy not found');
-      } 
-    });
+    .catch (() => res.status(404).send('client not found'))
 }); 
+
+
+function getPoliciesDataByUserId(x, res, userId) {
+  let policies = [];
+  axios.get(x)
+  .then(results => {
+    console.log('second userId is ' + userId);
+    if (results.error) {
+      res.status(500).send(results.error);
+    } else {
+      for ( let i = 0; i < results.data.policies.length; i++) {
+        if (userId === results.data.policies[i].clientId) {
+          policies.push(results.data.policies[i]);           
+        }
+      }
+      console.log('policies are ' + policies);
+      if ( !policies[0] ) {
+        throw new Error();
+      }
+      return res.send(policies);
+    }
+  }) //res.status(404).send('policy not found');
+  .catch (() => res.status(404).send('policy not found'));
+}
+
 
 
 // Get the user linked to a policy number OK
 router.get('/api/v1/users/:policyId', function(req, res, next) {
   let userId = '';
-  let found = false;
+  //let found = false;
   axios.get(policiesData)
     .then(results1 => {
       if (results1.error) {
@@ -111,13 +117,15 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
         for ( let i = 0; i < results1.data.policies.length; i++) {
           if (results1.data.policies[i].id === req.params.policyId) {
             userId = results1.data.policies[i].clientId; 
-            return axios.get(clientsData)
+            return getClientsData(clientsData, res, userId);
           } 
         }
-        res.status(404).send('policy not found');
+        throw new Error(); //res.status(404).send('policy not found');
       }
     })
-    .then(results2 => {
+    .catch (() => res.status(404).send('policy not found'))
+    /*.then(results2 => {
+      console.log('hola  '+ results2);
       if (results2.error) {
         res.status(500).send(results2.error);
       } else {
@@ -126,9 +134,29 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
             return res.send(results2.data.clients[i]);
           }
         }
-        return res.status(404).send('client not found');
+        throw new Error() //return res.status(404).send('client not found');
       }
-    });
+    })
+    .catch ((Error) => console.log(Error));*/
 });
+
+function getClientsData(x, res, userId) {
+  axios.get(x)
+    .then(results2 => {
+      console.log('hola  '+ results2);
+      if (results2.error) {
+        res.status(500).send(results2.error);
+      } else {
+        for ( let i = 0; i < results2.data.clients.length; i++) {
+          if (userId === results2.data.clients[i].id) {
+            return res.send(results2.data.clients[i]);
+          }
+        }
+        throw new Error() //return res.status(404).send('client not found');
+      }
+    })
+    .catch (() => res.status(404).send('client not found'));
+
+}
 
 module.exports = router;
