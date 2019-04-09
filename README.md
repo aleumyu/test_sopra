@@ -28,6 +28,10 @@ for an application that manages information about insurance policies and company
   - Middleware(checktoken) protects the each methods and endpoints according to the role
     - middleware will decode the jwt, which is present in the authorization header of the request to the protected enpoint and it ensures that the user's role matches one of the any of the requiered roles defined by the middleware paremeters.  
     - only if the role of that user which is encrypted in the jwt is allowed for any partiular endpoint, the user will be able to see the results
+    
+  - In order to test the enpoints in Postman, Headers must be defined by 'Key: authorization' and 'Value: Bearer jwt'
+
+  - Weak point: once a user get the authentication and if he/she fillter by username, especially by that of admin, he/she can get the user data, then can see admin's user id, which can be used to authenticate later as admin
 
 
 ## API ROUTES PLAN
