@@ -23,7 +23,7 @@ for an application that manages information about insurance policies and company
   - Assumption: every user is aware of their own id (in frontend)
 
   - With this userid, user can access to the endpoint as get(/api/vi/users/token/:userid)
-    - In the response of this endpoint JWT will be generated, which will be the encoded user for the userid params
+    - In the response of this endpoint jwt will be generated, which will be the encoded user for the userid params
     - Any future request to the protected enpoint must have jwt within the authorization header
 
   - Middleware(checktoken) protects the each methods and endpoints according to the role
@@ -32,7 +32,7 @@ for an application that manages information about insurance policies and company
 
   - In order to test the enpoints in Postman, Headers must be defined by 'Key: authorization' and 'Value: Bearer jwt'
 
-  - Weak point: once a user get the authentication and if he/she fillter by username, especially by that of admin, he/she can get the user data, then can see admin's user id, which can be used to authenticate later as admin.
+  - Weak point: once a user get the authentication and if he/she fillter by username, especially by that of admin, he/she can get the user data, then can see admin's user id, which can be used to authenticate later as admin
 
 
 ## API ROUTES PLAN
