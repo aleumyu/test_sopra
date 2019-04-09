@@ -124,20 +124,6 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
       }
     })
     .catch (() => res.status(404).send('policy not found'))
-    /*.then(results2 => {
-      console.log('hola  '+ results2);
-      if (results2.error) {
-        res.status(500).send(results2.error);
-      } else {
-        for ( let i = 0; i < results2.data.clients.length; i++) {
-          if (userId === results2.data.clients[i].id) {
-            return res.send(results2.data.clients[i]);
-          }
-        }
-        throw new Error() //return res.status(404).send('client not found');
-      }
-    })
-    .catch ((Error) => console.log(Error));*/
 });
 
 function getClientsData(x, res, userId) {
@@ -152,7 +138,7 @@ function getClientsData(x, res, userId) {
             return res.send(results2.data.clients[i]);
           }
         }
-        throw new Error() //return res.status(404).send('client not found');
+        throw new Error(); 
       }
     })
     .catch (() => res.status(404).send('client not found'));
