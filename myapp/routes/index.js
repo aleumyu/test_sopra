@@ -11,7 +11,6 @@ const policiesData = 'http://www.mocky.io/v2/580891a4100000e8242b75c5';
 
 // generate JWT token
 router.get('/api/v1/users/token/:userid', function(req, res, next) {
-  console.log('hihi');
   axios.get(clientsData) 
     .then(results => {
       if (results.error) {
