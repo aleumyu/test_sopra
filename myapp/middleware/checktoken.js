@@ -14,6 +14,7 @@ module.exports = {
                 try {
                     const user = jwt.verify(token, process.env.secretKey); 
                     let found = false;
+                    
                     requiredRoles.split(',').map(e => {
                         if (user.role === e ) {
                             found = true;

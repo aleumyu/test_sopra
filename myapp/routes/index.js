@@ -28,7 +28,8 @@ router.get('/api/v1/users/token/:userid', function(req, res, next) {
     });
 });
 
-// Get user data filtered by userid or username OK
+// Get user data filtered by userid or username -> Can be accessed by users with role "users" and "admin"
+
 router.get('/api/v1/users/', checkTokenForRoles('user,admin'), function(req, res, next) {
   console.log('test')
   let idParam = req.query.userid;
@@ -56,8 +57,9 @@ router.get('/api/v1/users/', checkTokenForRoles('user,admin'), function(req, res
 });
 
 
-// Get the list of policies linked to a username OK
-router.get('/api/v1/policies', function(req, res, next) {
+// Get the list of policies linked to a username  -> Can be accessed by users with role "admin"
+
+router.get('/api/v1/policies', checkTokenForRoles('admin'), function(req, res, next) {
   let userName = req.query.username;
   let userId = '';
   
@@ -84,7 +86,6 @@ function getPoliciesDataByUserId(x, res, userId) {
   let policies = [];
   axios.get(x)
   .then(results => {
-    console.log('second userId is ' + userId);
     if (results.error) {
       res.status(500).send(results.error);
     } else {
@@ -93,22 +94,22 @@ function getPoliciesDataByUserId(x, res, userId) {
           policies.push(results.data.policies[i]);           
         }
       }
-      console.log('policies are ' + policies);
       if ( !policies[0] ) {
         throw new Error();
       }
       return res.send(policies);
     }
-  }) //res.status(404).send('policy not found');
+  }) 
   .catch (() => res.status(404).send('policy not found'));
 }
 
 
 
-// Get the user linked to a policy number OK
-router.get('/api/v1/users/:policyId', function(req, res, next) {
+// Get the user linked to a policy number -> Can be accessed by users with role "admin"
+
+router.get('/api/v1/users/:policyId', checkTokenForRoles('admin'), function(req, res, next) {
   let userId = '';
-  //let found = false;
+
   axios.get(policiesData)
     .then(results1 => {
       if (results1.error) {
@@ -120,7 +121,7 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
             return getClientsData(clientsData, res, userId);
           } 
         }
-        throw new Error(); //res.status(404).send('policy not found');
+        throw new Error(); 
       }
     })
     .catch (() => res.status(404).send('policy not found'))
@@ -129,7 +130,6 @@ router.get('/api/v1/users/:policyId', function(req, res, next) {
 function getClientsData(x, res, userId) {
   axios.get(x)
     .then(results2 => {
-      console.log('hola  '+ results2);
       if (results2.error) {
         res.status(500).send(results2.error);
       } else {
